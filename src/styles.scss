@@ -1,1 +1,43 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import "~bootstrap/scss/bootstrap";
+@import "~ngx-toastr/toastr.css";
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #cccdd0;
+}
+
+.base-layout {
+  display: grid;
+
+
+  grid-template-areas: "sidebar main";
+  grid-template-columns: 2fr 10fr;
+  gap: 1.5rem;
+
+  @include media-breakpoint-down(lg) {
+    grid-template-areas: "sidebar" "main";
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+
+  aside {
+    grid-area: sidebar;
+    min-width: 230px;
+  }
+
+  main {
+    grid-area: main;
+  }
+}
+
+.long-text {
+  overflow-y: auto;
+  max-height: 150px;
+}
+
+.form-login {
+  max-width: 500px;
+}

@@ -1,0 +1,97 @@
+<app-menu-container>
+  <div class="mt-2 d-flex justify-content-between bg-light rounded p-2">
+    <div><h2 class="mb-0">Tasks</h2></div>
+    <div>
+      <button class="btn btn-primary" (click)="toogleSeachForm()">
+        <fa-icon [icon]="showSearch ? icons.faEyeSlash : icons.faEye"></fa-icon>
+        Search form
+      </button>
+      <button class="btn btn-primary ms-2" routerLink="/task/add">
+        <fa-icon [icon]="icons.faPlus"></fa-icon>
+        Add
+      </button>
+    </div>
+  </div>
+
+  <form *ngIf="showSearch" class="bg-light p-2 border rounded mt-2"
+        #searchForm="ngForm" (ngSubmit)="onSearchTask(searchForm)">
+    <div class="row">
+      <div class="col-12 col-sm-4">
+        <label for="sid">Number:</label>
+        <input id="sid" name="id" type="number" class="form-control form-control-sm"
+               [(ngModel)]="taskSearch.id">
+      </div>
+      <div class="col-12 col-sm-8">
+        <label for="stitle">Title/Description:</label>
+        <input id="stitle" name="title" type="text" class="form-control form-control-sm"
+               [(ngModel)]="taskSearch.title">
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4">
+        <label for="semployeeId">Responsible:</label>
+        <select id="semployeeId" name="employeeId" class="form-control form-control-sm"
+                [(ngModel)]="taskSearch.employeeId">
+          <option *ngIf="employees.length < 1" value="null" selected> - Loading -</option>
+          <option *ngIf="employees.length > 0" value="null" selected> - All -</option>
+          <option *ngFor="let employee of employees"
+                  [value]="employee.id">
+            {{employee.name}}</option>
+        </select>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4">
+        <label for="sstatus">Status:</label>
+        <select id="sstatus" name="completed" class="form-control form-control-sm" required
+                [(ngModel)]="taskSearch.completed">
+          <option value="null" selected> - All -</option>
+          <option value="false">Ongoing</option>
+          <option value="true">Completed</option>
+        </select>
+      </div>
+      <div class="col-12 col-sm-6 offset-sm-6 col-lg-4 offset-lg-0">
+        <button class="btn btn-sm btn-primary w-100 mt-4">
+          <fa-icon [icon]="icons.faSearch"></fa-icon>
+          Search
+        </button>
+      </div>
+    </div>
+  </form>
+  <hr>
+  <div class="alert alert-info" *ngIf="loading">
+    Loading tasks ...
+  </div>
+  <div class="alert alert-info" *ngIf="tasks.length < 1 && !loading">
+    No tasks
+  </div>
+  <div *ngIf="tasks.length > 0 && !loading">
+    <div class="card my-3 shadow-sm" *ngFor="let task of tasks">
+      <div class="card-header py-1 px-3 d-flex justify-content-between">
+        <div>
+          Nº {{task.id}} : <b>{{task.title}}</b> <br/>
+          <span class="badge text-light me-2" [ngClass]="task.completed ? 'bg-success': 'bg-primary'">
+          {{task.completed ? 'Completed' : 'Ongoing'}}
+        </span>
+          <span class="badge" [ngStyle]="getBadgePriorityStyle(task)">{{task.priority.name}} </span>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-sm btn-outline-success" title="Complete task"
+                  (click)="openModalCompleteTask(task)" *ngIf="!task.completed">
+            <fa-icon [icon]="icons.faCheck"></fa-icon>
+          </button>
+          <button class="btn btn-sm btn-outline-primary" title="Edit" routerLink="/task/edit/{{task.id}}">
+            <fa-icon [icon]="icons.faPencilAlt"></fa-icon>
+          </button>
+          <button class="btn btn-sm btn-outline-danger" title="Delete"
+                  (click)="openModalDeleteTask(task)">
+            <fa-icon [icon]="icons.faTrash"></fa-icon>
+          </button>
+        </div>
+      </div>
+      <div class="card-body py-1 px-3 long-text">{{task.description}}</div>
+      <div class="card-footer py-1 px-3 d-flex justify-content-between">
+        <div title="Responsible">
+          <fa-icon [icon]="icons.faUser"></fa-icon>
+          {{task.employee.name}}</div>
+        <div><small><b>Created:</b> {{task.created}}</small> | <small><b>Deadline:</b> {{task.deadline}}</small></div>
+      </div>
+    </div>
+  </div>
+</app-menu-container>

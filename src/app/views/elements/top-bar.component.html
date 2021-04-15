@@ -1,0 +1,12 @@
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand">Task Manager</a>
+    <div *ngIf="isLoggedIn()">
+      {{username}}
+      <button class="btn btn-primary" (click)="logout()">
+        <fa-icon [icon]="icons.faSignOutAlt"></fa-icon>
+        Sair
+      </button>
+    </div>
+  </div>
+</nav>

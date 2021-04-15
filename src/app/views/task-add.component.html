@@ -1,0 +1,87 @@
+<app-menu-container>
+  <div class="mt-2 d-flex justify-content-between bg-light rounded p-2">
+    <div><h2 class="mb-0">{{task?.id ? 'Edit' : 'Add'}}  Task {{task?.id}}</h2></div>
+    <div>
+      <button class="btn btn-primary" routerLink="/task">&lt; Back</button>
+    </div>
+  </div>
+  <hr>
+  <div class="alert alert-info" *ngIf="loading">
+    Loading ...
+  </div>
+  <form class="bg-light rounded border shadow-sm p-2"
+        #addTaskForm="ngForm" (ngSubmit)="onAddTask(addTaskForm)" *ngIf="!loading"
+        [ngClass]="wasSubmited ? 'was-validated' : ''">
+    <input *ngIf="task?.id" name="id" type="hidden" [(ngModel)]="task.id"/>
+    <div class="row">
+      <div class="col-12 mb-2">
+        <label class="form-label w-100" for="ftitle">Title: </label>
+        <input id="ftitle" class="form-control" name="title" required
+               [ngClass]="errors?.title ? 'is-invalid' : ''"
+               [(ngModel)]="task.title"/>
+        <div class="invalid-feedback" *ngIf="errors?.title">{{errors.title}}</div>
+      </div>
+
+      <div class="col-12 mb-2">
+        <label class="form-label w-100" for="fdescription">Description: </label>
+        <textarea id="fdescription" class="form-control" name="description" required
+                  [ngClass]="errors?.description ? 'is-invalid' : ''"
+                  [(ngModel)]="task.description"></textarea>
+        <div class="invalid-feedback" *ngIf="errors?.description">{{errors.description}}</div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-4 mb-2">
+        <label class="form-label w-100" for="femployeeId">Responsible: </label>
+        <select id="femployeeId" class="form-control" name="employeeId" required
+                [ngClass]="errors?.employeeId ? 'is-invalid' : ''"
+                [(ngModel)]="task.employeeId">
+          <option *ngIf="employees.length < 1" value=""> Loading</option>
+          <option *ngIf="employees.length > 0" value=""> - Select -</option>
+          <option *ngFor="let employee of employees"
+                  [value]="employee.id">
+            {{employee.name}}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="errors?.employeeId">{{errors.employeeId}}</div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-4 mb-1 mb-2">
+        <label class="form-label w-100" for="fpriorityId">Priority: </label>
+        <select id="fpriorityId" class="form-control mb-0" name="priorityId" required
+                [ngClass]="errors?.priorityId ? 'is-invalid' : ''"
+                [(ngModel)]="task.priorityId">
+          <option *ngIf="priorities.length < 1" value=""> Loading</option>
+          <option *ngIf="priorities.length > 0" value=""> - Select -</option>
+          <option *ngFor="let priority of priorities"
+                  [value]="priority.id">
+            {{priority.name}}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="errors?.priorityId">{{errors.priorityId}}</div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-4 mb-2">
+        <label class="form-label w-100" for="fdeadline">Deadline: </label>
+        <input id="fdeadline" class="form-control" name="deadline" type="date" required
+               [ngClass]="errors?.deadline ? 'is-invalid' : ''"
+               [(ngModel)]="task.deadline"
+               min="{{getCurrentDate() | date:'yyyy-MM-dd'}}"/>
+        <div class="invalid-feedback" *ngIf="errors?.deadline">{{errors.deadline}}</div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-4 mb-2">
+        <label for="fcompleted">Completed</label>
+        <div class="form-check form-switch mt-2">
+          <input id="fcompleted" class="form-check-input" name="completed" type="checkbox"
+                 [(ngModel)]="task.completed">
+          <label class="form-check-label" for="fcompleted"></label>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4 offset-lg-4 mb-2">
+        <button [disabled]="addTaskForm.invalid"
+                class="btn btn-primary w-100" type="submit">
+          💾 {{task.id ? 'Save' : 'Add'}}
+        </button>
+      </div>
+    </div>
+  </form>
+</app-menu-container>

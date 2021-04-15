@@ -1,0 +1,25 @@
+<div class="container container-">
+  <form class="form-login bg-light rounded border shadow-sm p-2 mx-auto"
+        #formLogin="ngForm" (ngSubmit)="login(formLogin)">
+    <h3 class="text-center">Sign in</h3>
+    <div>
+      <label for="username">Username</label>
+      <input id="username" name="username" [disabled]="loading"
+             class="form-control" required
+             [(ngModel)]="authRequest.username"/>
+    </div>
+    <div>
+      <label for="password">Password: </label>
+      <input id="password" name="password" [disabled]="loading"
+             class="form-control" type="password" required
+             [(ngModel)]="authRequest.password"/>
+    </div>
+    <div class="mt-3">
+      <button class="btn btn-primary w-100"
+              [disabled]="formLogin.invalid || loading"
+              type="submit">Sign in
+      </button>
+    </div>
+
+  </form>
+</div>
